@@ -237,3 +237,5 @@ task.spawn(function()
 			:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	end);
 end);
+
+error("QOL Loaded")
