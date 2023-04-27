@@ -1,6 +1,6 @@
 repeat
 	wait();
-until game.Loaded and game.Players.LocalPlayer and game.Players.LocalPlayer.Character.Humanoid;
+until game.Loaded and game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid;
 
 -- \\ Anti Kick:
 
