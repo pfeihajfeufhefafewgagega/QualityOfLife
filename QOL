@@ -1,6 +1,6 @@
 repeat
 	wait();
-until game.Loaded and game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid;
+until game.Loaded and game:GetService("Players").LocalPlayer and game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character.Humanoid;
 
 -- \\ Anti Kick:
 
@@ -9,7 +9,7 @@ task.spawn(function()
 		return;
 	end;
 
-	local LocalPlayer = game.Players.LocalPlayer;
+	local LocalPlayer = game:GetService("Players").LocalPlayer;
 	local oldhmmi;
 	local oldhmmnc;
 	oldhmmi = hookmetamethod(game, "__index", function(self, method)
@@ -89,7 +89,7 @@ task.spawn(function()
 	end;
 
 	local VirtualUser = game:service("VirtualUser")
-	game.Players.LocalPlayer.Idled:connect(function()
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
 		VirtualUser:CaptureController();
 		VirtualUser:ClickButton2(Vector2.new());
 	end);
@@ -105,8 +105,8 @@ task.spawn(function()
 
 	game.RunService.Stepped:Connect(function()
 		pcall(function()
-			for _, plr in pairs(game.Players:GetPlayers()) do
-				if plr ~= game.Players.LocalPlayer then
+			for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
+				if plr ~= game:GetService("Players").LocalPlayer then
 					for i, inst in pairs(plr.Character:GetChildren()) do
 						if (inst.ClassName == "Part") or (inst.ClassName == "MeshPart") then
 							inst.CanCollide = false;
@@ -220,22 +220,21 @@ task.spawn(function()
 	if not Anti_Trip then
 		return;
 	end;
-	game.Players.LocalPlayer.Character
+	game:GetService("Players").LocalPlayer.Character
 		:WaitForChild("Humanoid")
 		:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-	game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false);
+	game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false);
 
-	game.Players.LocalPlayer.CharacterAdded:Connect(function()
+	game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
 		repeat
 			wait();
-		until game.Players.LocalPlayer.Character;
-		game.Players.LocalPlayer.Character
+		until game:GetService("Players").LocalPlayer.Character;
+		game:GetService("Players").LocalPlayer.Character
 			:WaitForChild("Humanoid")
 			:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-		game.Players.LocalPlayer.Character
+		game:GetService("Players").LocalPlayer.Character
 			:WaitForChild("Humanoid")
 			:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 	end);
 end);
-
 
