@@ -253,7 +253,7 @@ task.spawn(function()
 	function chatlog(plr)
 		if plr ~= game.Players.LocalPlayer then
 			plr.Chatted:Connect(function(cht)
-				wait(0.45)
+				wait(0.75)
 				for _, v in pairs(game.Players.LocalPlayer.PlayerGui:GetDescendants()) do
 					if
 						v:IsA("TextLabel") --[[and string.sub(v.Text,1,5) == "<font"]]
