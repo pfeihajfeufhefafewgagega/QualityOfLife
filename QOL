@@ -274,5 +274,8 @@ task.spawn(function()
 	for _, v in pairs(game.Players:GetPlayers()) do
 		chatlog(v)
 	end
-	game.Players.PlayerAdded:Connect(chatlog)
+	game.Players.PlayerAdded:Connect(function(v)
+            wait(4)
+            chatlog(v)
+        end)
 end)
