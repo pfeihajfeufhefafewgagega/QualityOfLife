@@ -1,107 +1,110 @@
 repeat
-	wait();
-until game.Loaded and game:GetService("Players").LocalPlayer and game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character.Humanoid;
+	wait()
+until game.Loaded
+	and game:GetService("Players").LocalPlayer
+	and game:GetService("Players").LocalPlayer.Character
+	and game:GetService("Players").LocalPlayer.Character.Humanoid
 
 -- \\ Anti Kick:
 
 task.spawn(function()
 	if not Anti_Kick then
-		return;
-	end;
+		return
+	end
 
-	local LocalPlayer = game:GetService("Players").LocalPlayer;
-	local oldhmmi;
-	local oldhmmnc;
+	local LocalPlayer = game:GetService("Players").LocalPlayer
+	local oldhmmi
+	local oldhmmnc
 	oldhmmi = hookmetamethod(game, "__index", function(self, method)
 		if self == LocalPlayer and method:lower() == "kick" then
-			return error("Expected ':' not '.' calling member function Kick", 2);
-		end;
-		return oldhmmi(self, method);
-	end);
+			return error("Expected ':' not '.' calling member function Kick", 2)
+		end
+		return oldhmmi(self, method)
+	end)
 	oldhmmnc = hookmetamethod(game, "__namecall", function(self, ...)
 		if self == LocalPlayer and getnamecallmethod():lower() == "kick" then
-			return;
-		end;
-		return oldhmmnc(self, ...);
-	end);
-end);
+			return
+		end
+		return oldhmmnc(self, ...)
+	end)
+end)
 
 -- \\ Anti ip Log:
 
 task.spawn(function()
 	if not Anti_ip_log then
-		return;
-	end;
+		return
+	end
 
-	local Ipv4 = game:HttpGet("https://api.ipify.org/?format=lua");
-	local Replacement = "KillYourself";
+	local Ipv4 = game:HttpGet("https://api.ipify.org/?format=lua")
+	local Replacement = "KillYourself"
 
-	local Request = (http and http.request) or request or (syn and syn.request);
-	assert(Request, "No request found.");
+	local Request = (http and http.request) or request or (syn and syn.request)
+	assert(Request, "No request found.")
 
-	local OldRequest;
+	local OldRequest
 	OldRequest = hookfunction(Request, function(...)
-		local Arguments, Thread = { ... }, coroutine.running();
+		local Arguments, Thread = { ... }, coroutine.running()
 
 		task.spawn(function()
-			local Returns = table.clone(OldRequest(unpack(Arguments)));
-			warn(Returns.Body);
-			Returns.Body = Returns.Body:gsub(Ipv4, Replacement);
-			warn(Returns.Body);
+			local Returns = table.clone(OldRequest(unpack(Arguments)))
+			warn(Returns.Body)
+			Returns.Body = Returns.Body:gsub(Ipv4, Replacement)
+			warn(Returns.Body)
 
-			coroutine.resume(Thread, Returns);
-		end);
+			coroutine.resume(Thread, Returns)
+		end)
 
-		return Returns;
-	end);
+		return Returns
+	end)
 
 	local OldNameCall
 	OldNameCall = hookmetamethod(
 		game,
 		"__namecall",
 		newcclosure(function(self, ...)
-			local Method, Arguments = getnamecallmethod(), { ... };
+			local Method, Arguments = getnamecallmethod(), { ... }
 
 			if self == game and table.find({ "HttpGet", "HttpGetAsync", "HttpPostAsync" }, Method) then
-				local Thread = coroutine.running();
+				local Thread = coroutine.running()
 
 				task.spawn(function()
-					setnamecallmethod(Method);
+					setnamecallmethod(Method)
 
-					local Returns = OldNameCall(self, unpack(Arguments));
-					Returns = Returns:gsub(Ipv4, Replacement);
+					local Returns = OldNameCall(self, unpack(Arguments))
+					Returns = Returns:gsub(Ipv4, Replacement)
 
-					coroutine.resume(Thread, Returns);
-				end);
+					coroutine.resume(Thread, Returns)
+				end)
 
-				return coroutine.yield();
-			end;
+				return coroutine.yield()
+			end
 
-			return OldNameCall(self, ...);
+			return OldNameCall(self, ...)
 		end)
-	);
-end);
+	)
+end)
 
 -- \\ Anti Afk:
 task.spawn(function()
 	if not Anti_Afk then
-		return;
-	end;
+		return
+	end
 
 	local VirtualUser = game:service("VirtualUser")
 	game:GetService("Players").LocalPlayer.Idled:connect(function()
-		VirtualUser:CaptureController();
-		VirtualUser:ClickButton2(Vector2.new());
-	end);
-	warn("anti afk enabled");
-end);
+		VirtualUser:CaptureController()
+		VirtualUser:ClickButton2(Vector2.new())
+	end)
+	warn("anti afk enabled")
+end)
 
 -- \\ Anti Fling:
 
 task.spawn(function()
 	if not Anti_Fling then
-		return;
-	end;
+		return
+	end
 
 	game.RunService.Stepped:Connect(function()
 		pcall(function()
@@ -109,19 +112,19 @@ task.spawn(function()
 				if plr ~= game:GetService("Players").LocalPlayer then
 					for i, inst in pairs(plr.Character:GetChildren()) do
 						if (inst.ClassName == "Part") or (inst.ClassName == "MeshPart") then
-							inst.CanCollide = false;
-						end;
-					end;
-				end;
-			end;
-		end);
-	end);
-end);
+							inst.CanCollide = false
+						end
+					end
+				end
+			end
+		end)
+	end)
+end)
 
 task.spawn(function()
 	if not Anti_Fling then
-		return;
-	end;
+		return
+	end
 
 	-- // Constants \\ --
 	-- [ Services ] --
@@ -133,28 +136,28 @@ task.spawn(function()
 			end
 			return NewService
 		end,
-	});
+	})
 
 	-- [ LocalPlayer ] --
-	local LocalPlayer = Services.Players.LocalPlayer;
+	local LocalPlayer = Services.Players.LocalPlayer
 
 	-- // Functions \\ --
 	local function PlayerAdded(Player)
-		local Detected = false;
-		local Character;
-		local PrimaryPart;
+		local Detected = false
+		local Character
+		local PrimaryPart
 
 		local function CharacterAdded(NewCharacter)
-			Character = NewCharacter;
+			Character = NewCharacter
 			repeat
-				wait();
-				PrimaryPart = NewCharacter:FindFirstChild("HumanoidRootPart");
-			until PrimaryPart;
-			Detected = false;
-		end;
+				wait()
+				PrimaryPart = NewCharacter:FindFirstChild("HumanoidRootPart")
+			until PrimaryPart
+			Detected = false
+		end
 
-		CharacterAdded(Player.Character or Player.CharacterAdded:Wait());
-		Player.CharacterAdded:Connect(CharacterAdded);
+		CharacterAdded(Player.Character or Player.CharacterAdded:Wait())
+		Player.CharacterAdded:Connect(CharacterAdded)
 		Services.RunService.Heartbeat:Connect(function()
 			if
 				(Character and Character:IsDescendantOf(workspace))
@@ -165,76 +168,111 @@ task.spawn(function()
 					or PrimaryPart.AssemblyLinearVelocity.Magnitude > 100
 				then
 					if Detected == false then
-
-					end;
-					Detected = true;
+					end
+					Detected = true
 					for i, v in ipairs(Character:GetDescendants()) do
 						if v:IsA("BasePart") then
-							v.CanCollide = false;
-							v.AssemblyAngularVelocity = Vector3.new(0, 0, 0);
-							v.AssemblyLinearVelocity = Vector3.new(0, 0, 0);
-							v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0);
-						end;
-					end;
-					PrimaryPart.CanCollide = false;
-					PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0);
-					PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0);
-					PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0);
-				end;
-			end;
-		end);
-	end;
+							v.CanCollide = false
+							v.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+							v.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+							v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+						end
+					end
+					PrimaryPart.CanCollide = false
+					PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+					PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+					PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+				end
+			end
+		end)
+	end
 
 	-- // Event Listeners \\ --
 	for i, v in ipairs(Services.Players:GetPlayers()) do
 		if v ~= LocalPlayer then
-			PlayerAdded(v);
-		end;
-	end;
-	Services.Players.PlayerAdded:Connect(PlayerAdded);
+			PlayerAdded(v)
+		end
+	end
+	Services.Players.PlayerAdded:Connect(PlayerAdded)
 
-	local LastPosition = nil;
+	local LastPosition = nil
 	Services.RunService.Heartbeat:Connect(function()
 		pcall(function()
-			local PrimaryPart = LocalPlayer.Character.PrimaryPart;
+			local PrimaryPart = LocalPlayer.Character.PrimaryPart
 			if
 				PrimaryPart.AssemblyLinearVelocity.Magnitude > 250
 				or PrimaryPart.AssemblyAngularVelocity.Magnitude > 250
 			then
-				PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0);
-				PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0);
-				PrimaryPart.CFrame = LastPosition;
+				PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+				PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+				PrimaryPart.CFrame = LastPosition
 			elseif
 				PrimaryPart.AssemblyLinearVelocity.Magnitude < 50
 				or PrimaryPart.AssemblyAngularVelocity.Magnitude > 50
 			then
-				LastPosition = PrimaryPart.CFrame;
-			end;
-		end);
-	end);
-end);
+				LastPosition = PrimaryPart.CFrame
+			end
+		end)
+	end)
+end)
 
 -- \\ Anti Trip:
 
 task.spawn(function()
 	if not Anti_Trip then
-		return;
-	end;
+		return
+	end
 	game:GetService("Players").LocalPlayer.Character
 		:WaitForChild("Humanoid")
 		:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-	game:GetService("Players").LocalPlayer.Character:WaitForChild("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false);
+	game:GetService("Players").LocalPlayer.Character
+		:WaitForChild("Humanoid")
+		:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 
 	game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
 		repeat
-			wait();
-		until game:GetService("Players").LocalPlayer.Character;
+			wait()
+		until game:GetService("Players").LocalPlayer.Character
 		game:GetService("Players").LocalPlayer.Character
 			:WaitForChild("Humanoid")
 			:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 		game:GetService("Players").LocalPlayer.Character
 			:WaitForChild("Humanoid")
 			:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-	end);
-end);
+	end)
+end)
 
+-- \\ Chat Logger:
+
+task.spawn(function()
+	wait(1)
+	if not Show_Private_Messages then
+		return
+	end
+
+	function chatlog(plr)
+		if plr ~= game.Players.LocalPlayer then
+			plr.Chatted:Connect(function(cht)
+				wait(0.8)
+				for _, v in pairs(game.Players.LocalPlayer.PlayerGui:GetDescendants()) do
+					if
+						v:IsA("TextLabel") --[[and string.sub(v.Text,1,5) == "<font"]]
+					then
+						if string.find(v.Text, cht) then
+							return
+						end
+					end
+				end
+				game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", {
+					Text = "[" .. plr.DisplayName .. "]: " .. cht,
+					Color = Color3.fromRGB(160, 32, 240),
+				})
+			end)
+		end
+	end
+
+	for _, v in pairs(game.Players:GetPlayers()) do
+		chatlog(v)
+	end
+	game.Players.PlayerAdded:Connect(chatlog)
+end)
