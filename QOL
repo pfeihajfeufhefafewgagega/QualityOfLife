@@ -106,7 +106,7 @@ task.spawn(function()
 		return
 	end
 
-	game.RunService.Stepped:Connect(function()
+	game:GetService("RunService").Stepped:Connect(function()
 		pcall(function()
 			for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
 				if plr ~= game:GetService("Players").LocalPlayer then
