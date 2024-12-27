@@ -1,10 +1,21 @@
-Friend_Checker = true
 repeat
 	wait()
 until game.Loaded
 	and game:GetService("Players").LocalPlayer
 	and game:GetService("Players").LocalPlayer.Character
 	and game:GetService("Players").LocalPlayer.Character.Humanoid
+
+-- \\ Unlock FPS:
+
+task.spawn(function()
+    if not Unlock_FPS then
+	return
+    end
+
+    setfpscap(1500)
+end)
+
+
 
 -- \\ Anti Kick:
 
@@ -281,7 +292,7 @@ task.spawn(function()
 	end)
 end)
 
--- \\ Friend Checker
+-- \\ Friend Checker:
 
 task.spawn(function()
 	if not Friend_Checker then
