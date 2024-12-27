@@ -1,3 +1,4 @@
+Friend_Checker = true
 repeat
 	wait()
 until game.Loaded
@@ -275,56 +276,58 @@ task.spawn(function()
 		chatlog(v)
 	end
 	game.Players.PlayerAdded:Connect(function(v)
-            wait(4)
-            chatlog(v)
-        end)
+		wait(4)
+		chatlog(v)
+	end)
 end)
 
 -- \\ Friend Checker
 
 task.spawn(function()
-    if not Friend_Checker then
-	return
-    end
+	if not Friend_Checker then
+		return
+	end
 
-    local key = game:GetService("UserInputService")
-    local run = false
-    function friendStuff()
-	for _,v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
-    		task.spawn(function()
-		pcall(function()
-		if v:IsA("ImageLabel") then
-        	   local plr = game.Players[tostring(v.NameLabel.Text:sub(2))]
-                   local friends = "";
-        	   for _2,v2 in pairs(game.Players:GetPlayers()) do
-			pcall(function()
-                       		if plr:IsFriendsWith(v2.UserId) then
-                          	friends = friends.." "..v2.Name..","
-                       		end
+	local key = game:GetService("UserInputService")
+	local run = false
+	function friendStuff()
+		for _, v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
+			task.spawn(function()
+				pcall(function()
+					if v:IsA("ImageLabel") then
+						local plr = game.Players[tostring(v.NameLabel.Text:sub(2))]
+						local friends = "";
+						for _2, v2 in pairs(game.Players:GetPlayers()) do
+							pcall(function()
+								if plr:IsFriendsWith(v2.UserId) then
+									friends = friends .. " " .. v2.Name .. ","
+								end
+							end)
+						end
+						if tostring(v.DisplayNameLabel.Text .. " ~ " .. friends) ~= v.DisplayNameLabel.Text then
+							v.DisplayNameLabel.Text = v.DisplayNameLabel.Text .. " ~ " .. friends
+						end
+					end
+				end)
 			end)
-                   end
-               v.DisplayNameLabel.Text = v.DisplayNameLabel.Text.." ~ "..friends
-           	end
-		end)
-	   end)
-       end
-    end
+		end
+	end
 
-    key.InputBegan:Connect(function(input)
-	 if input.KeyCode == Enum.KeyCode.Escape and not run then
-        run = true
-        wait(1)
-	    friendStuff()
-        run = false
-	 end
-     end)
+	key.InputBegan:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.Escape and not run then
+			run = true
+			wait(1)
+			friendStuff()
+			run = false
+		end
+	end)
 end)
 
 -- \\ Btr Roblox V3
 
 task.spawn(function()
-    if not BetterRBXv3 then
-	return
-    end
-    loadstring(game:HttpGet('https://astroswrld.club/BetterRoblox/Loader'))()
+	if not BetterRBXv3 then
+		return
+	end
+	loadstring(game:HttpGet('https://astroswrld.club/BetterRoblox/Loader'))()
 end)
