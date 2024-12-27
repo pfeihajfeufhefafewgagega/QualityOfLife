@@ -288,7 +288,7 @@ task.spawn(function()
     end
 
     local key = game:GetService("UserInputService")
-
+    local run = false
     function friendStuff()
 	for _,v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
     		task.spawn(function()
@@ -311,21 +311,11 @@ task.spawn(function()
     end
 
     key.InputBegan:Connect(function(input)
-	 if input.KeyCode == Enum.KeyCode.Escape then
-            wait()
-for _,v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
-    		task.spawn(function()
-		pcall(function()
-		if v:IsA("ImageLabel") then
-        	   local plr = game.Players[tostring(v.NameLabel.Text:sub(2))]
-
-               v.DisplayNameLabel.Text = plr.DisplayName
-           	end
-		end)
-	   end)
-       end
-wait()
+	 if input.KeyCode == Enum.KeyCode.Escape and not run then
+        run = true
+        wait(1)
 	    friendStuff()
+        run = false
 	 end
      end)
 end)
