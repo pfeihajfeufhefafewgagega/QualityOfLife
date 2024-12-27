@@ -313,6 +313,18 @@ task.spawn(function()
     key.InputBegan:Connect(function(input)
 	 if input.KeyCode == Enum.KeyCode.Escape then
             wait()
+for _,v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
+    		task.spawn(function()
+		pcall(function()
+		if v:IsA("ImageLabel") then
+        	   local plr = game.Players[tostring(v.NameLabel.Text:sub(2))]
+
+               v.DisplayNameLabel.Text = plr.DisplayName
+           	end
+		end)
+	   end)
+       end
+wait()
 	    friendStuff()
 	 end
      end)
