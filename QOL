@@ -291,7 +291,8 @@ task.spawn(function()
 
     function friendStuff()
 	for _,v in pairs(game:GetService("CoreGui").RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer.PageViewClipper.PageView.PageViewInnerFrame.Players:GetChildren()) do
-    		pcall(function()
+    		task.spawn(function()
+		pcall(function()
 		if v:IsA("ImageLabel") then
         	   local plr = game.Players[tostring(v.NameLabel.Text:sub(2))]
                    local friends = "";
@@ -303,8 +304,9 @@ task.spawn(function()
 			end)
                    end
                v.DisplayNameLabel.Text = v.DisplayNameLabel.Text.." ~ "..friends
-           end
-	end)
+           	end
+		end)
+	   end)
        end
     end
 
